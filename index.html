@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Ember</title>
+<style>
+:root{--bg:#0c0a13;--s1:#151221;--s2:#1d1932;--tx:#f3eefa;--sub:#8f88a8;--a1:#ffb56b;--a2:#ff6b9a;--a3:#8b7cff;--a4:#5ee0c1;--sd:rgba(0,0,0,.6);--sl:rgba(255,255,255,.05);--bd:rgba(255,255,255,.07);--g:linear-gradient(135deg,#ffb56b,#ff6b9a)}
+[data-theme=light]{--bg:#eeeaf3;--s1:#f6f3fa;--s2:#e9e4f0;--tx:#241f30;--sub:#7a7390;--a3:#6c5ce7;--a4:#1fae90;--sd:rgba(140,128,170,.42);--sl:rgba(255,255,255,.95);--bd:rgba(0,0,0,.06)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0}
+html,body{height:100%}
+body{background:var(--bg);color:var(--tx);font-family:ui-rounded,"SF Pro Rounded",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;overflow:hidden;padding-top:env(safe-area-inset-top);-webkit-font-smoothing:antialiased;transition:background .4s}
+body:before,body:after{content:"";position:fixed;width:340px;height:340px;border-radius:50%;filter:blur(90px);pointer-events:none}
+body:before{background:var(--a3);top:-120px;right:-100px;opacity:.3}
+body:after{background:var(--a2);bottom:-140px;left:-120px;opacity:.18}
+#app{position:relative;height:100vh;height:100dvh;display:flex;flex-direction:column;max-width:560px;margin:auto}
+#hd{display:flex;justify-content:space-between;align-items:center;padding:16px 22px 8px}
+#hd small,.sub{color:var(--sub)}#hd small{font-size:13px}
+#hd h1{font-size:28px;font-weight:800;letter-spacing:-.5px}
+.av{width:46px;height:46px;border-radius:50%;border:0;font-size:22px;background:var(--s1);color:var(--tx);box-shadow:5px 5px 12px var(--sd),-4px -4px 10px var(--sl),inset 0 0 0 1px var(--bd)}
+#ct{flex:1;overflow-y:auto;padding:6px 18px 130px;scrollbar-width:none}#ct::-webkit-scrollbar{display:none}
+.pg>*{animation:up .55s cubic-bezier(.2,.8,.2,1) both}
+.pg>:nth-child(2){animation-delay:.06s}.pg>:nth-child(3){animation-delay:.12s}.pg>:nth-child(4){animation-delay:.18s}.pg>:nth-child(n+5){animation-delay:.24s}
+.pg .rf{animation:rg 1.1s cubic-bezier(.2,.8,.2,1)}
+@keyframes up{from{opacity:0;transform:translateY(16px)}}
+@keyframes rg{from{stroke-dashoffset:var(--c)}}
+.card{background:linear-gradient(160deg,var(--s2),var(--s1));border-radius:26px;padding:18px;margin-bottom:16px;box-shadow:9px 9px 20px var(--sd),-6px -6px 16px var(--sl),inset 0 1px 0 var(--bd)}
+.cap{font-size:13px;color:var(--sub);font-weight:700;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center}
+.hero{display:flex;align-items:center;gap:18px;position:relative;overflow:hidden}
+.hero:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 0 0,rgba(255,107,154,.2),transparent 60%)}
+.rg{position:relative;flex-shrink:0}.rg svg{width:100%;height:100%}.rb{stroke:var(--sd);opacity:.5}
+.rf{transition:stroke-dashoffset .3s linear}
+.ri{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.chip{display:inline-flex;align-items:center;gap:5px;padding:7px 12px;border-radius:14px;font-size:12.5px;font-weight:700;background:var(--s1);box-shadow:inset 3px 3px 7px var(--sd),inset -3px -3px 7px var(--sl)}
+.chip svg{color:var(--a1)}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.g3 .card{margin-bottom:16px}
+.st{text-align:center;padding:16px 6px}.st b{display:block;font-size:26px;margin-bottom:2px}.st small{color:var(--sub);font-size:12px}
+.wk{display:flex;justify-content:space-between}.wd{display:flex;flex-direction:column;align-items:center;gap:7px}
+.wd i{width:34px;height:34px;border-radius:12px;background:var(--g)}.wd small{font-size:11px;color:var(--sub)}
+.btn{border:0;border-radius:16px;padding:14px 22px;font-weight:800;font-size:15px;font-family:inherit;background:var(--g);color:#1b1020;box-shadow:0 8px 22px rgba(255,107,154,.32);transition:transform .15s}
+.btn:active{transform:scale(.95)}
+.btn.gh{background:var(--s1);color:var(--tx);box-shadow:5px 5px 12px var(--sd),-4px -4px 10px var(--sl)}
+.in{width:100%;background:var(--bg);border:0;border-radius:16px;padding:14px 16px;color:var(--tx);font-family:inherit;font-size:15px;outline:none;box-shadow:inset 5px 5px 10px var(--sd),inset -4px -4px 9px var(--sl);transition:box-shadow .25s}
+.in:focus{box-shadow:inset 5px 5px 10px var(--sd),inset -4px -4px 9px var(--sl),0 0 0 2px var(--a2)}
+textarea.in{min-height:130px;resize:none;line-height:1.55;margin:14px 0;display:block}
+[data-theme=dark] .in{color-scheme:dark}
+.ck{width:28px;height:28px;border-radius:10px;display:grid;place-items:center;flex-shrink:0;color:transparent;background:var(--bg);box-shadow:inset 3px 3px 6px var(--sd),inset -3px -3px 6px var(--sl);transition:.25s cubic-bezier(.2,.8,.2,1)}
+.ck.on{background:var(--g);color:#1b1020;box-shadow:0 4px 14px rgba(255,107,154,.4);transform:scale(1.06)}
+.ck.big{width:46px;height:46px;border-radius:16px}
+.it{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--bd)}.it:last-child{border:0;padding-bottom:0}.it:first-child{padding-top:0}
+.tx{flex:1;font-size:15px;transition:.3s}.tx.on{color:var(--sub);text-decoration:line-through}
+.x{color:var(--sub);padding:6px;opacity:.7}
+.pb{height:9px;border-radius:9px;background:var(--bg);box-shadow:inset 2px 2px 4px var(--sd);overflow:hidden}
+.pb i{display:block;height:100%;background:var(--g);border-radius:9px;transition:width .6s cubic-bezier(.2,.8,.2,1)}
+.ds{display:flex;gap:10px;overflow-x:auto;margin:0 -18px 16px;padding:4px 18px 14px;scrollbar-width:none}
+.dy{flex:0 0 56px;padding:12px 0;border-radius:18px;border:0;background:var(--s1);color:var(--sub);text-align:center;font-family:inherit;font-size:12px;font-weight:600;box-shadow:5px 5px 12px var(--sd),-4px -4px 10px var(--sl);transition:.3s}
+.dy b{display:block;font-size:19px;color:var(--tx);margin-top:4px}.dy i{display:block;width:5px;height:5px;border-radius:50%;background:var(--a4);margin:6px auto 0}
+.dy.on{background:var(--g);color:#1b1020;transform:translateY(-3px)}.dy.on b{color:#1b1020}
+.tk{position:relative}.tkh{display:flex;align-items:center;gap:14px}
+.bub{width:50px;height:50px;border-radius:17px;display:grid;place-items:center;font-size:23px;background:color-mix(in srgb,var(--c) 18%,transparent);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--c) 35%,transparent)}
+.fl{flex:1}.fl b{display:block;font-size:16px}.fl small{color:var(--c);display:flex;align-items:center;gap:4px;margin-top:3px;font-weight:700;font-size:12.5px}
+.dots{display:flex;gap:7px;margin-top:16px}.dots i{flex:1;height:8px;border-radius:6px;background:var(--bg);box-shadow:inset 2px 2px 3px var(--sd)}
+.dots i.on{background:var(--c);box-shadow:0 0 12px color-mix(in srgb,var(--c) 60%,transparent)}
+.rm{text-align:right;font-size:12px;color:var(--sub);margin-top:12px}
+.mr{display:flex;gap:8px;margin-top:4px}
+.mc{flex:1;padding:11px 0;border-radius:16px;text-align:center;font-size:24px;background:var(--bg);box-shadow:inset 3px 3px 7px var(--sd),inset -3px -3px 7px var(--sl);transition:.3s cubic-bezier(.2,.8,.2,1);opacity:.5}
+.mc.on{opacity:1;transform:translateY(-4px);background:var(--s2);box-shadow:5px 5px 12px var(--sd),-3px -3px 9px var(--sl),0 0 0 2px var(--mc)}
+.ent{border-left:4px solid var(--mc);border-radius:8px 24px 24px 8px}
+.eh{display:flex;justify-content:space-between;font-size:13px;color:var(--sub);font-weight:700;margin-bottom:6px}
+.ent p{font-size:14.5px;line-height:1.55;white-space:pre-wrap;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.tw{display:flex;flex-direction:column;align-items:center}
+.tmx{font-size:46px;font-weight:800;letter-spacing:-1px;font-variant-numeric:tabular-nums}
+.cs{display:flex;gap:8px;margin-bottom:14px}
+.cs span{flex:1;text-align:center;padding:12px 0;border-radius:14px;font-size:13px;font-weight:700;background:var(--bg);color:var(--sub);box-shadow:inset 3px 3px 6px var(--sd),inset -3px -3px 6px var(--sl);transition:.25s}
+.cs span.on{background:var(--g);color:#1b1020;box-shadow:0 6px 16px rgba(255,107,154,.3)}
+.al{display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--bd)}.al:last-child{border:0;padding-bottom:0}
+.al div{flex:1}.tm{font-size:28px;font-weight:800;letter-spacing:-.5px}.tm small{font-size:13px;color:var(--sub);margin-left:3px}.al div>small{color:var(--sub);font-size:13px}
+.sw{position:relative;width:52px;height:30px}.sw input{display:none}
+.sw i{position:absolute;inset:0;border-radius:20px;background:var(--bg);box-shadow:inset 3px 3px 6px var(--sd),inset -3px -3px 6px var(--sl);transition:.3s}
+.sw i:after{content:"";position:absolute;top:4px;left:4px;width:22px;height:22px;border-radius:50%;background:var(--sub);transition:.35s cubic-bezier(.2,.8,.2,1)}
+.sw input:checked+i:after{transform:translateX(22px);background:var(--g)}
+.em{text-align:center;color:var(--sub);padding:22px 0;font-size:14px;line-height:1.6}.em b{display:block;font-size:34px;margin-bottom:8px}
+.pf{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:16px}
+.pf span{font-size:24px;width:48px;height:48px;display:grid;place-items:center;border-radius:16px;background:var(--bg);box-shadow:inset 3px 3px 6px var(--sd),inset -3px -3px 6px var(--sl);transition:.25s}
+.pf span.on{background:var(--s2);box-shadow:5px 5px 12px var(--sd),0 0 0 2px var(--a2);transform:translateY(-3px)}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+#nv{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom));transform:translateX(-50%);display:flex;gap:4px;padding:8px;border-radius:34px;background:color-mix(in srgb,var(--s1) 82%,transparent);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:0 14px 40px var(--sd),inset 0 1px 0 var(--bd);z-index:5}
+#nv button{display:flex;align-items:center;gap:6px;height:46px;padding:0 14px;border:0;border-radius:24px;background:transparent;color:var(--sub);font-weight:800;font-size:13px;font-family:inherit;transition:.4s cubic-bezier(.2,.8,.2,1)}
+#nv button span{max-width:0;overflow:hidden;opacity:0;transition:.4s}
+#nv button.on{background:var(--g);color:#1b1020;box-shadow:0 6px 20px rgba(255,107,154,.4)}#nv button.on span{max-width:56px;opacity:1}
+#fab{position:fixed;right:max(22px,calc(50% - 258px));bottom:calc(100px + env(safe-area-inset-bottom));width:58px;height:58px;border-radius:20px;border:0;background:var(--g);color:#1b1020;display:none;align-items:center;justify-content:center;box-shadow:0 12px 30px rgba(255,107,154,.45);z-index:5;transition:transform .25s}
+#fab:active{transform:scale(.9) rotate(90deg)}
+#sh{position:fixed;inset:0;z-index:20;display:none}#sh.on{display:block}
+.bk{position:absolute;inset:0;background:rgba(5,3,10,.6);backdrop-filter:blur(4px);animation:fd .3s}
+.sp{position:absolute;left:0;right:0;bottom:0;max-width:560px;margin:auto;background:var(--s1);border-radius:30px 30px 0 0;padding:14px 22px calc(26px + env(safe-area-inset-bottom));animation:sl .45s cubic-bezier(.2,.8,.2,1);box-shadow:0 -10px 40px var(--sd)}
+@keyframes sl{from{transform:translateY(100%)}}@keyframes fd{from{opacity:0}}
+.gp{width:42px;height:5px;border-radius:5px;background:var(--sub);opacity:.4;margin:0 auto 16px}
+.sp h3{font-size:20px;margin-bottom:14px}.sp .in{margin-bottom:14px}.sp .btn{width:100%}
+.toast{position:fixed;top:calc(18px + env(safe-area-inset-top));left:50%;transform:translate(-50%,-20px);background:var(--s2);color:var(--tx);padding:12px 20px;border-radius:16px;box-shadow:8px 8px 20px var(--sd),inset 0 1px 0 var(--bd);opacity:0;transition:.35s cubic-bezier(.2,.8,.2,1);pointer-events:none;font-size:14px;font-weight:700;z-index:30}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute"><defs><linearGradient id="gr" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffb56b"/><stop offset="1" stop-color="#ff6b9a"/></linearGradient></defs></svg>
+<div id="app"><div id="hd"></div><div id="ct"></div><button id="fab"></button><nav id="nv"></nav><div id="sh"></div></div>
+<script>
+const K='emberDiaryState_v1',$=i=>document.getElementById(i),pad=n=>String(n).padStart(2,'0');
+const iso=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()),today=()=>iso(new Date());
+const dAgo=n=>{const d=new Date();d.setDate(d.getDate()+n);return d},uid=()=>Math.random().toString(36).slice(2,9);
+const esc=s=>(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])),vb=()=>navigator.vibrate&&navigator.vibrate(10);
+const fd=s=>new Date(s+'T00:00').toLocaleDateString('en-US',{weekday:'short',day:'numeric',month:'short'});
+const PT={home:'M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z',book:'M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2zM4 19a2 2 0 0 1 2-2h13',cal:'M4 6h16v14H4zM4 10h16M8 3v4M16 3v4',pulse:'M3 12h4l3-8 4 16 3-8h4',timer:'M12 5a8 8 0 1 0 0 16 8 8 0 0 0 0-16zM12 9v4l2.5 2M9 2h6',plus:'M12 5v14M5 12h14',flame:'M12 3c1 4 5 5 5 10a5 5 0 0 1-10 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-5 1-9z',x:'M6 6l12 12M18 6L6 18',check:'M5 12l5 5 9-10',moon:'M20 14A8 8 0 0 1 10 4a8 8 0 1 0 10 10z',down:'M12 4v11M7 10l5 5 5-5M5 20h14',up:'M12 20V9M7 14l5-5 5 5M5 4h14'};
+const ic=(n,s=22)=>`<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="${PT[n]}"/></svg>`;
+const dS=()=>({theme:'dark',tab:'home',profile:{name:'You',emoji:'🙂',bio:''},diary:[],planner:[],alarms:[],trackers:[{id:uid(),name:'Reading',type:'habit',dates:[]},{id:uid(),name:'Drink water',type:'diet',dates:[]},{id:uid(),name:'Sleep 7h+',type:'sleep',dates:[]}]});
+let state;try{state=Object.assign(dS(),JSON.parse(localStorage.getItem(K))||{})}catch(e){state=dS()}
+if(!['home','diary','plan','trk','focus','profile'].includes(state.tab))state.tab='home';
+const sv=()=>localStorage.setItem(K,JSON.stringify(state));
+let tm,SH=null,nt='habit',armed=null,selDay=today(),tSet=1500,tLeft=1500,tRun=false,tEnd=0,tInt=null;
+const TC={habit:'var(--a3)',diet:'var(--a4)',sleep:'var(--a1)'},TE={habit:'🎯',diet:'🥗',sleep:'😴'};
+const MO=[['😄','#5ee0c1'],['🙂','#8b7cff'],['😐','#ffb56b'],['😔','#ff8f6b'],['😢','#6b8bff']],mcol=e=>(MO.find(m=>m[0]===e)||[0,'#8b7cff'])[1];
+function streak(ds){let s=0,n=ds.includes(today())?0:-1;while(ds.includes(iso(dAgo(n)))){s++;n--}return s}
+function dayPct(d){const ts=state.planner.filter(x=>x.date===d),n=state.trackers.length+ts.length;return n?(state.trackers.filter(x=>x.dates.includes(d)).length+ts.filter(x=>x.done).length)/n:0}
+function toast(m){let t=$('toast');if(!t){t=document.createElement('div');t.id='toast';t.className='toast';document.body.appendChild(t)}t.textContent=m;t.classList.add('show');clearTimeout(window._t);window._t=setTimeout(()=>t.classList.remove('show'),1800)}
+function ring(p,z,w,inner,id){const r=(z-w)/2,c=+(2*Math.PI*r).toFixed(1),h=z/2;return `<div class="rg" style="width:${z}px;height:${z}px"><svg viewBox="0 0 ${z} ${z}"><circle class="rb" cx="${h}" cy="${h}" r="${r}" fill="none" stroke-width="${w}"/><circle ${id?`id="${id}"`:''} class="rf" cx="${h}" cy="${h}" r="${r}" fill="none" stroke="url(#gr)" stroke-width="${w}" stroke-linecap="round" stroke-dasharray="${c}" style="stroke-dashoffset:${c*(1-p)};--c:${c}" transform="rotate(-90 ${h} ${h})"/></svg><div class="ri">${inner}</div></div>`}
+function trend(){const n=14,v=[...Array(n)].map((_,i)=>Math.round(dayPct(iso(dAgo(i-n+1)))*100)),mx=(n-1)/2,my=v.reduce((a,b)=>a+b,0)/n;let a=0,b=0;v.forEach((y,i)=>{a+=(i-mx)*(y-my);b+=(i-mx)**2});
+const sl=b?a/b:0,c0=my-sl*mx,pr=[n,n+1,n+2].map(x=>Math.max(0,Math.min(100,Math.round(c0+sl*x)))),W=300,H=110,px=(W-8)/(n+2),Y=q=>+(H-10-q/100*(H-24)).toFixed(1),X=i=>+(i*px+4).toFixed(1);
+const pts=v.map((q,i)=>X(i)+','+Y(q)),qs=pr.map((q,i)=>X(n+i)+','+Y(q)),ln='M'+pts.join(' L'),ar=ln+` L${X(n-1)},${H} L${X(0)},${H}Z`,ds='M'+pts[n-1]+' L'+qs.join(' L');
+return [`<svg viewBox="0 0 ${W} ${H}" style="width:100%;display:block"><defs><linearGradient id="gl" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="${W}" y2="0"><stop offset="0" stop-color="#ffb56b"/><stop offset="1" stop-color="#ff6b9a"/></linearGradient><linearGradient id="ga" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff6b9a" stop-opacity=".3"/><stop offset="1" stop-color="#ff6b9a" stop-opacity="0"/></linearGradient></defs><path d="${ar}" fill="url(#ga)"/><path d="${ln}" fill="none" stroke="url(#gl)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="${ds}" fill="none" stroke="#8b7cff" stroke-width="2.5" stroke-dasharray="2 6" stroke-linecap="round"/><circle cx="${X(n-1)}" cy="${Y(v[n-1])}" r="4.5" fill="#ff6b9a"/></svg>`,pr[2]+'% in 3 days']}
+const ckRow=x=>`<div class="it"><span class="ck ${x.dates.includes(today())?'on':''}" onclick="tgK('${x.id}')">${ic('check',16)}</span><span class="tx">${TE[x.type]} ${esc(x.name)}</span><small class="sub">${streak(x.dates)}d</small></div>`;
+function vHome(){const t=today(),p=dayPct(t),pc=Math.round(p*100),tk=state.trackers,ts=state.planner.filter(x=>x.date===t),tot=tk.length+ts.length,dn=tk.filter(x=>x.dates.includes(t)).length+ts.filter(x=>x.done).length,best=Math.max(0,...tk.map(x=>streak(x.dates))),m=state.diary.find(e=>e.date===t),[tr,pj]=trend();
+const wk=[6,5,4,3,2,1,0].map(n=>{const d=dAgo(-n);return `<div class="wd"><i style="opacity:${(.14+.86*dayPct(iso(d))).toFixed(2)}"></i><small>${'SMTWTFS'[d.getDay()]}</small></div>`}).join('');
+return `<div class="card hero">${ring(p,132,12,`<b style="font-size:30px">${pc}%</b><small class="sub">today</small>`)}<div style="position:relative;flex:1"><div style="font-size:17px;font-weight:800">${dn} of ${tot} done</div><div class="sub" style="margin:5px 0 12px;font-size:13.5px">${pc>=100?'Perfect day. Keep it up.':pc>0?'Nice momentum, keep going.':'Start with one small win.'}</div><span class="chip">${ic('flame',15)} ${best} day best</span></div></div>
+<div class="g3"><div class="card st"><b>${m?m.mood:'—'}</b><small>Mood</small></div><div class="card st"><b>${streak(state.diary.map(e=>e.date))}</b><small>Writing streak</small></div><div class="card st"><b>${ts.filter(x=>!x.done).length}</b><small>Tasks left</small></div></div>
+<div class="card"><div class="cap">This week</div><div class="wk">${wk}</div></div>
+<div class="card"><div class="cap"><span>Momentum</span><span style="color:var(--a1)">${pj}</span></div>${tr}<div class="sub" style="font-size:12px;margin-top:8px">Solid: last 14 days. Dotted: projected from your trend.</div></div>
+<div class="card"><div class="cap">Quick check-in</div>${tk.map(ckRow).join('')||'<div class="em">No trackers yet</div>'}</div>`}
+function vDiary(){const t=today(),en=state.diary.find(e=>e.date===t);if(!tm)tm=en?en.mood:'🙂';
+const list=state.diary.slice().reverse().map(e=>`<div class="card ent" style="--mc:${mcol(e.mood)}"><div class="eh"><span>${fd(e.date)}</span><span style="font-size:18px">${e.mood}</span></div><p>${esc(e.text)}</p></div>`).join('')||'<div class="em"><b>📔</b>Your story starts here.<br>Write your first entry above.</div>';
+return `<div class="card"><div class="cap"><span>How are you feeling?</span><span>${fd(t)}</span></div><div class="mr">${MO.map(([e,c])=>`<div class="mc ${e===tm?'on':''}" data-m="${e}" style="--mc:${c}" onclick="setM('${e}')">${e}</div>`).join('')}</div>
+<textarea id="dt" class="in" placeholder="Write about your day...">${en?esc(en.text):''}</textarea><button class="btn" style="width:100%" onclick="saveD()">Save entry</button></div><div class="cap" style="margin:0 6px 12px">Past entries</div>${list}`}
+function setM(m){tm=m;document.querySelectorAll('.mc').forEach(e=>e.classList.toggle('on',e.dataset.m===m));vb()}
+function saveD(){const v=$('dt').value.trim();if(!v)return toast('Write something first');const t=today(),i=state.diary.findIndex(e=>e.date===t),e={id:uid(),date:t,mood:tm,text:v};i>=0?state.diary[i]=e:state.diary.push(e);sv();render();toast('Entry saved')}
+function vPlan(){const ts=state.planner.filter(x=>x.date===selDay),dn=ts.filter(x=>x.done).length,p=ts.length?dn/ts.length*100:0;
+const strip=[-2,-1,0,1,2,3,4].map(n=>{const d=dAgo(n),k=iso(d);return `<button class="dy ${k===selDay?'on':''}" onclick="selD('${k}')">${['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()]}<b>${d.getDate()}</b><i style="opacity:${state.planner.some(x=>x.date===k)?1:0}"></i></button>`}).join('');
+return `<div class="ds">${strip}</div><div class="card"><div class="cap"><span>${selDay===today()?'Today':fd(selDay)}</span><span>${dn}/${ts.length} done</span></div><div class="pb"><i style="width:${p}%"></i></div></div>
+<div class="card">${ts.map(x=>`<div class="it"><span class="ck ${x.done?'on':''}" onclick="tgT('${x.id}')">${ic('check',16)}</span><span class="tx ${x.done?'on':''}">${esc(x.text)}</span><span class="x" onclick="dlT('${x.id}')">${ic('x',16)}</span></div>`).join('')||'<div class="em"><b>✨</b>Nothing planned yet.<br>Tap + to add a task.</div>'}</div>`}
+const selD=k=>{selDay=k;vb();render()},tgT=id=>{const t=state.planner.find(x=>x.id===id);t.done=!t.done;vb();sv();render()},dlT=id=>{state.planner=state.planner.filter(x=>x.id!==id);sv();render()};
+function vTrk(){return state.trackers.map(t=>{const d=today(),dn=t.dates.includes(d),dots=[6,5,4,3,2,1,0].map(n=>`<i class="${t.dates.includes(iso(dAgo(-n)))?'on':''}"></i>`).join('');
+return `<div class="card tk" style="--c:${TC[t.type]}"><div class="tkh"><div class="bub">${TE[t.type]}</div><div class="fl"><b>${esc(t.name)}</b><small>${ic('flame',14)} ${streak(t.dates)} day streak</small></div><span class="ck big ${dn?'on':''}" onclick="tgK('${t.id}')">${ic('check',22)}</span></div><div class="dots">${dots}</div><div class="rm" onclick="dlK('${t.id}')">${armed===t.id?'Tap again to remove':'Remove'}</div></div>`}).join('')||'<div class="em"><b>📈</b>No trackers yet.<br>Tap + to build a habit.</div>'}
+const tgK=id=>{const t=state.trackers.find(x=>x.id===id),d=today();t.dates=t.dates.includes(d)?t.dates.filter(x=>x!==d):[...t.dates,d];vb();sv();render()};
+function dlK(id){if(armed!==id){armed=id;render();return}armed=null;state.trackers=state.trackers.filter(x=>x.id!==id);sv();render()}
+const fm=s=>(s>=3600?Math.floor(s/3600)+':':'')+pad(Math.floor(s/60)%60)+':'+pad(s%60),f12=s=>{const[h,m]=s.split(':').map(Number);return `${h%12||12}:${pad(m)}<small>${h<12?'AM':'PM'}</small>`};
+function vFocus(){const al=[...state.alarms].sort((a,b)=>a.time.localeCompare(b.time)),pr=tSet/60;
+return `<div class="card tw">${ring(tLeft/tSet,228,14,`<div class="tmx" id="tmx">${fm(tLeft)}</div><small class="sub">${tRun?'Focusing':'Ready'}</small>`,'tmr')}<div class="cs" style="width:100%;margin:22px 0 14px">${[5,15,25,45].map(m=>`<span class="${pr===m?'on':''}" onclick="tPre(${m})">${m}m</span>`).join('')}</div><div style="display:flex;gap:12px;width:100%"><button class="btn" style="flex:1" onclick="tStart()">${tRun?'Pause':tLeft<tSet&&tLeft>0?'Resume':'Start'}</button><button class="btn gh" onclick="tReset()">Reset</button></div></div>
+<div class="card"><div class="cap"><span>Alarms & sleep reminder</span><span class="chip" onclick="addBed()">${ic('moon',14)} Bedtime</span></div>${al.map(a=>`<div class="al"><div><b class="tm">${f12(a.time)}</b><small>${esc(a.label)}</small></div><label class="sw"><input type="checkbox" ${a.enabled?'checked':''} onchange="tgA('${a.id}')"><i></i></label><span class="x" onclick="dlA('${a.id}')">${ic('x',16)}</span></div>`).join('')||'<div class="em"><b>⏰</b>No alarms yet.<br>Tap + or add a bedtime reminder.</div>'}</div>`}
+function tUpd(){const a=$('tmx'),r=$('tmr');if(a)a.textContent=fm(tLeft);if(r)r.style.strokeDashoffset=(+r.getAttribute('stroke-dasharray'))*(1-tLeft/tSet)}
+function tick(){tLeft=Math.max(0,Math.ceil((tEnd-Date.now())/1000));tUpd();if(tLeft<=0){clearInterval(tInt);tRun=false;notify('Focus session complete');if(state.tab==='focus')render()}}
+function tStart(){if(tRun){tLeft=Math.max(0,Math.round((tEnd-Date.now())/1000));tRun=false;clearInterval(tInt)}else{if(tLeft<=0)tLeft=tSet;tEnd=Date.now()+tLeft*1000;tRun=true;tInt=setInterval(tick,250)}vb();render()}
+const tPre=m=>{if(tRun)return;tSet=tLeft=m*60;vb();render()},tReset=()=>{tRun=false;clearInterval(tInt);tLeft=tSet;render()};
+const tgA=id=>{const a=state.alarms.find(x=>x.id===id);a.enabled=!a.enabled;vb();sv();render()},dlA=id=>{state.alarms=state.alarms.filter(x=>x.id!==id);sv();render()};
+function addBed(){state.alarms.push({id:uid(),time:'22:30',label:'Wind down for bed',enabled:true});sv();render();toast('Bedtime reminder added')}
+function beep(){try{const c=new (window.AudioContext||window.webkitAudioContext)(),o=c.createOscillator();o.frequency.value=880;o.connect(c.destination);o.start();setTimeout(()=>o.stop(),350)}catch(e){}}
+function notify(l){try{if('Notification' in window){Notification.permission==='granted'?new Notification('Ember',{body:l}):Notification.permission!=='denied'&&Notification.requestPermission()}}catch(e){}beep();vb();toast('⏰ '+l)}
+const fired=new Set();setInterval(()=>{const d=new Date(),cur=pad(d.getHours())+':'+pad(d.getMinutes());state.alarms.forEach(a=>{const k=a.id+cur;if(a.enabled&&a.time===cur&&!fired.has(k)){fired.add(k);notify(a.label)}})},10000);
+function vProf(){const p=state.profile,done=state.planner.filter(x=>x.done).length,best=Math.max(0,...state.trackers.map(x=>streak(x.dates)));
+return `<div class="card"><div class="pf">${['🙂','😎','🦊','🐼','🦉','🌙','🔥','🚀'].map(e=>`<span class="${e===p.emoji?'on':''}" onclick="pE('${e}')">${e}</span>`).join('')}</div><input id="pn" class="in" value="${esc(p.name)}" placeholder="Your name"><textarea id="pb" class="in" style="min-height:80px" placeholder="A short bio">${esc(p.bio)}</textarea><button class="btn" style="width:100%" onclick="saveP()">Save profile</button></div>
+<div class="g3"><div class="card st"><b>${state.diary.length}</b><small>Entries</small></div><div class="card st"><b>${done}</b><small>Tasks done</small></div><div class="card st"><b>${best}</b><small>Best streak</small></div></div>
+<div class="card row"><b>Dark mode</b><label class="sw"><input type="checkbox" ${state.theme==='dark'?'checked':''} onchange="tTheme()"><i></i></label></div>
+<div class="card"><div class="cap">Backup & restore</div><div class="sub" style="font-size:13.5px;line-height:1.5;margin-bottom:14px">Export your data, save the file to Google Drive, and import it on a new device to continue where you left off.</div><div style="display:flex;gap:12px"><button class="btn" style="flex:1;display:flex;gap:8px;justify-content:center" onclick="expD()">${ic('down',18)} Export</button><button class="btn gh" style="flex:1;display:flex;gap:8px;justify-content:center" onclick="$('imp').click()">${ic('up',18)} Import</button></div><input type="file" id="imp" accept="application/json,.json" style="display:none" onchange="impD(event)"></div>`}
+const pE=e=>{state.profile.emoji=e;vb();sv();render()};
+function saveP(){state.profile.name=$('pn').value.trim()||'You';state.profile.bio=$('pb').value;sv();render();toast('Profile saved')}
+function tTheme(){state.theme=state.theme==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',state.theme);sv()}
+function expD(){const u=URL.createObjectURL(new Blob([JSON.stringify(state,null,2)],{type:'application/json'})),a=document.createElement('a');a.href=u;a.download='ember-backup-'+today()+'.json';a.click();URL.revokeObjectURL(u);toast('Backup exported')}
+function impD(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=v=>{try{const d=JSON.parse(v.target.result);if(!Array.isArray(d.diary))throw 0;state=Object.assign(dS(),d);sv();document.documentElement.setAttribute('data-theme',state.theme);tm=null;render(true);toast('Data restored')}catch(x){toast('Not a valid backup file')}};r.readAsText(f)}
+function showS(){const s=$('sh');if(!SH){s.className='';s.innerHTML='';return}
+const T={task:['New task','What needs doing?','Add task'],trk:['New tracker','e.g. Guitar practice','Create tracker'],al:['New alarm','Label (e.g. Study break)','Set alarm']}[SH];s.className='on';
+s.innerHTML=`<div class="bk" onclick="closeS()"></div><div class="sp"><div class="gp"></div><h3>${T[0]}</h3>${SH==='al'?'<input id="f2" type="time" value="07:00" class="in" style="font-size:30px;text-align:center;font-weight:800">':''}<input id="f1" class="in" placeholder="${T[1]}" onkeydown="if(event.key===\'Enter\')subm()">${SH==='trk'?`<div class="cs">${[['habit','🎯 Hobby'],['diet','🥗 Diet'],['sleep','😴 Sleep']].map(([k,l])=>`<span class="${k===nt?'on':''}" onclick="pk('${k}',this)">${l}</span>`).join('')}</div>`:''}<button class="btn" onclick="subm()">${T[2]}</button></div>`;
+if(SH!=='al')setTimeout(()=>$('f1')&&$('f1').focus(),380)}
+const openS=k=>{SH=k;vb();showS()},closeS=()=>{SH=null;showS()},pk=(k,el)=>{nt=k;el.parentNode.querySelectorAll('span').forEach(s=>s.classList.toggle('on',s===el))};
+function subm(){const a=$('f1').value.trim();
+if(SH==='task'){if(!a)return;state.planner.push({id:uid(),date:selDay,text:a,done:false})}
+else if(SH==='trk'){if(!a)return;state.trackers.push({id:uid(),name:a,type:nt,dates:[]})}
+else{const t=$('f2').value;if(!t)return;state.alarms.push({id:uid(),time:t,label:a||'Reminder',enabled:true})}
+sv();closeS();render();toast('Added')}
+const TABS=[['home','home','Home'],['diary','book','Diary'],['plan','cal','Plan'],['trk','pulse','Track'],['focus','timer','Focus']];
+function hdr(){const h=new Date().getHours(),g=h<12?'Good morning':h<18?'Good afternoon':'Good evening',T={home:[g,state.profile.name],diary:['Your journal','Diary'],plan:['Organize your day','Planner'],trk:['Build consistency','Trackers'],focus:['Stay in flow','Focus'],profile:['Account','Profile']}[state.tab];
+$('hd').innerHTML=`<div><small>${T[0]}</small><h1>${esc(T[1])}</h1></div><button class="av" onclick="go('profile')">${state.profile.emoji}</button>`}
+function render(anim){hdr();$('ct').innerHTML={home:vHome,diary:vDiary,plan:vPlan,trk:vTrk,focus:vFocus,profile:vProf}[state.tab]();
+if(anim){$('ct').classList.remove('pg');void $('ct').offsetWidth;$('ct').classList.add('pg');$('ct').scrollTop=0}
+TABS.forEach(([i])=>$('n_'+i).classList.toggle('on',state.tab===i));$('fab').style.display=['plan','trk','focus'].includes(state.tab)?'flex':'none'}
+function go(t){if(state.tab===t)return;state.tab=t;armed=null;sv();vb();render(true)}
+$('nv').innerHTML=TABS.map(([i,c,l])=>`<button id="n_${i}" onclick="go('${i}')">${ic(c,20)}<span>${l}</span></button>`).join('');
+$('fab').innerHTML=ic('plus',26);$('fab').onclick=()=>openS({plan:'task',trk:'trk',focus:'al'}[state.tab]);
+document.documentElement.setAttribute('data-theme',state.theme||'dark');render(true);
+</script>
+</body>
+</html>
